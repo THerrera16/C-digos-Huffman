@@ -49,7 +49,6 @@ void minHeapify(MinHeap* minHeap, int idx) {
     int left = 2 * idx + 1;
     int right = 2 * idx + 2;
     int i;
-
     if (left < minHeap->size && minHeap->array[left]->freq < minHeap->array[smallest]->freq)
         smallest = left;
     if (right < minHeap->size && minHeap->array[right]->freq < minHeap->array[smallest]->freq)
@@ -90,7 +89,6 @@ MinHeap* buildMinHeap(int freq[], int size) {
 Node* buildHuffmanTree(int freq[], int size) {
     Node *left, *right, *top;
     MinHeap* minHeap = buildMinHeap(freq, size);
-    
     while (minHeap->size > 1) {
         left = extractMin(minHeap);
         right = extractMin(minHeap);
@@ -126,7 +124,6 @@ void saveEncodedFile(char *text, Code codes[], int codeCount, int originalBits) 
         printf("Error opening codificado.txt\n");
         return;
     }
-    
     int encodedBits = 0;
     int i, j;
     for (i = 0; text[i]; i++)
@@ -135,11 +132,9 @@ void saveEncodedFile(char *text, Code codes[], int codeCount, int originalBits) 
                 fprintf(fp, "%s", codes[j].code);
                 encodedBits += strlen(codes[j].code);
             }
-    
     printf("\nOriginal size: %d bits\n", originalBits);
     printf("Compressed size: %d bits\n", encodedBits);
     printf("Compression ratio: %.2f%%\n", (float)encodedBits / originalBits * 100);
-    
     fclose(fp);
 }
 
@@ -149,7 +144,6 @@ void decodeFile(Node* root, char *encodedText) {
         printf("Error opening decodificado.txt\n");
         return;
     }
-    
     Node* curr = root;
     int i;
     for (i = 0; encodedText[i]; i++) {
@@ -168,7 +162,6 @@ int main() {
         printf("Error opening input.txt\n");
         return 1;
     }
-
     char text[MAX_TEXT];
     int freq[MAX_SIZE] = {0};
     int c, textLength = 0;
@@ -179,25 +172,19 @@ int main() {
     }
     text[textLength] = '\0';
     fclose(fp);
-
     Node* root = buildHuffmanTree(freq, MAX_SIZE);
-
     Code codes[MAX_SIZE];
     int codeIndex = 0;
     char code[100];
     generateCodes(root, code, 0, codes, &codeIndex);
-
     printf("Character frequencies:\n");
     for (i = 0; i < MAX_SIZE; i++)
         if (freq[i] > 0)
             printf("'%c': %d\n", (char)i, freq[i]);
-    
     printf("\nHuffman Codes:\n");
     for (i = 0; i < codeIndex; i++)
         printf("'%c': %s\n", codes[i].ch, codes[i].code);
-
     saveEncodedFile(text, codes, codeIndex, textLength * 8);
-
     fp = fopen("codificado.txt", "r");
     if (!fp) {
         printf("Error opening codificado.txt\n");
@@ -209,9 +196,7 @@ int main() {
         encodedText[textLength++] = c;
     encodedText[textLength] = '\0';
     fclose(fp);
-
     decodeFile(root, encodedText);
-
     printf("\nDecoding complete. Check decodificado.txt\n");
     return 0;
 }
